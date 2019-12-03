@@ -31,6 +31,13 @@
     _text2.maxLength = 100;
     _text2.cornerRadius = 20;
     
+    _textV.GWTextViewEditingBlock = ^(GW_TextViewEditingType editingType) {
+        NSLog(@"GWTextViewEditingBlock = %ld",(long)editingType);
+    };
+    
+    _textV.GWTextDidChangeBlock = ^(GW_TextView * _Nonnull textView, NSString * _Nonnull text) {
+        NSLog(@"GWTextDidChangeBlock = %@",text);
+    };
     
 }
 

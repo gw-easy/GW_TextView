@@ -9,27 +9,43 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef NS_ENUM(NSInteger, GW_TextViewEditingType) {
+    GW_TextViewNone = 0,
+    GW_TextViewBeginEditing, //开始编辑
+    GW_TextViewEndEditing, //结束编辑
+    GW_TextViewReturn, //return事件
+};
+
 @class GW_TextView;
-typedef void(^GWTextViewBlock)(GW_TextView *textView);
 
 IB_DESIGNABLE
-//IB_DESIGNABLE 效果就是带有IBInspectable自定义属性能再XIB上及时看到当前类调改的效果,比如设置placeholder的时候或者设置圆角,可以立即呈现.
+//IB_DESIGNABLE 效果就是带有IBInspectable自定义属性能再XIB上及时看到当前类调改的效果,比如设置placeholder的时候或者设置圆角,可以立即呈现.如果报错，请将这句话注释并重启
+
 
 @interface GW_TextView : UITextView
+
+/// 获取编辑类型
+@property (copy, nonatomic) void(^GWTextViewEditingBlock)(GW_TextViewEditingType editingType);
+
+/**
+ 设定文本改变Block回调.
+ */
+@property (copy, nonatomic) void(^GWTextDidChangeBlock)(GW_TextView *textView,NSString *text);
+
+/**
+ 设定达到最大长度Block回调.
+ */
+@property (copy, nonatomic) void(^GWTextLengthDidMaxBlock)(GW_TextView *textView,NSInteger maxLength);
+
+
 /**
  便利构造器.
  */
 + (instancetype)textView;
 
-/**
- 设定文本改变Block回调.
- */
-- (void)addTextDidChangeBlock:(GWTextViewBlock)eventBlock;
 
-/**
- 设定达到最大长度Block回调.
- */
-- (void)addTextLengthDidMaxBlock:(GWTextViewBlock)maxBlock;
+
 
 //IBInspectable 将代码属性插入到xib或sb的状态栏里面
 

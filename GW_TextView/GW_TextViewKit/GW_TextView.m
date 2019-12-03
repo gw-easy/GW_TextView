@@ -11,9 +11,8 @@
 CGFloat const TextViewPlaceholderVerticalMargin = 8.0; ///< placeholder垂直方向边距
 CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平方向边距
 
-@interface GW_TextView()
-@property (nonatomic, copy) GWTextViewBlock changeBlock; ///< 文本改变Block
-@property (nonatomic, copy) GWTextViewBlock maxBlock; ///< 达到最大限制字符数Block
+@interface GW_TextView()<UITextViewDelegate>
+
 ///< placeholderLabel
 @property (nonatomic, strong) UILabel *placeholderLabel;
 @end
@@ -57,7 +56,7 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
 {
     // 基本配置 (需判断是否在Storyboard中设置了值)
     _canPerformAction = YES;
-    
+    self.delegate = self;
     if (_maxLength == 0 || _maxLength == NSNotFound) {
         
         _maxLength = NSUIntegerMax;
@@ -123,14 +122,6 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
     return [[self alloc] init];
 }
 
-- (void)addTextDidChangeBlock:(GWTextViewBlock)eventBlock{
-    _changeBlock = [eventBlock copy];
-}
-
-- (void)addTextLengthDidMaxBlock:(GWTextViewBlock)maxBlock{
-    _maxBlock = [maxBlock copy];
-}
-
 #pragma mark - NSNotification
 - (void)textDidChange:(NSNotification *)notification
 {
@@ -153,15 +144,40 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
     if (_maxLength != NSUIntegerMax && _maxLength != 0 && self.text.length > 0) {
         
         if (!self.markedTextRange && self.text.length > _maxLength) {
-            
-            !_maxBlock ?: _maxBlock(self); // 回调达到最大限制的Block.
+            // 回调达到最大限制的Block.
+            if (_GWTextLengthDidMaxBlock) {
+                _GWTextLengthDidMaxBlock(self,_maxLength);
+            }
             self.text = [self.text substringToIndex:_maxLength]; // 截取最大限制字符数.
             [self.undoManager removeAllActions]; // 达到最大字符数后清空所有 undoaction, 以免 undo 操作造成crash.
         }
     }
     
     // 回调文本改变的Block.
-    !_changeBlock ?: _changeBlock(self);
+    if (_GWTextDidChangeBlock) {
+        _GWTextDidChangeBlock(self,self.formatText);
+    }
+}
+
+#pragma mark - textView - delegate
+- (void)textViewDidBeginEditing:(UITextView *)textView{
+    if (self.GWTextViewEditingBlock) {
+        self.GWTextViewEditingBlock(GW_TextViewBeginEditing);
+    }
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView{
+    if (self.GWTextViewEditingBlock) {
+        self.GWTextViewEditingBlock(GW_TextViewEndEditing);
+    }
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    if (self.GWTextViewEditingBlock && [text isEqualToString:@"\n"]) {
+        self.GWTextViewEditingBlock(GW_TextViewReturn);
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - Getter
@@ -260,8 +276,6 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
 
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    _changeBlock = NULL;
-    _maxBlock = NULL;
 }
 
 @end
