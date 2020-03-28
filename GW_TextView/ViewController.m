@@ -21,11 +21,15 @@
 }
 
 - (void)test1{
-    _textV = [[GW_TextView alloc] initWithFrame:CGRectMake(10, 100, self.view.bounds.size.width-20, 300)];
+    _textV = [[GW_TextView alloc] initWithFrame:CGRectMake(10, 100, self.view.bounds.size.width-20, 50)];
     [self.view addSubview:_textV];
     _textV.backgroundColor = [UIColor greenColor];
+    _textV.textColor = [UIColor blackColor];
     _textV.placeholder = @"lihaile";
-    _textV.maxLength = 10;
+//    _textV.maxLength = 10;
+    _textV.font = [UIFont systemFontOfSize:25];
+//    _textV.maxLine = 1;
+//    _textV.maxLineMode = NSLineBreakByTruncatingTail;
     
     _text2.placeholder = @"hhhhhhh";
     _text2.maxLength = 100;

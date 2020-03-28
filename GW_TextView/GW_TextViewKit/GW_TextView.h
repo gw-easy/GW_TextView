@@ -42,17 +42,22 @@ IB_DESIGNABLE
 /**
  便利构造器.
  */
-+ (instancetype)textView;
-
-
++ (GW_TextView *)textView;
 
 
 //IBInspectable 将代码属性插入到xib或sb的状态栏里面
 
 /**
- 最大限制文本长度, 默认为无穷大, 即不限制, 如果被设为 0 也同样表示不限制字符数.
+ 最大限制文本长度, 默认无限制, 如果被设为 0 也同样表示不限制字符数. -优先级高于maxLine
  */
 @property (nonatomic, assign) IBInspectable NSUInteger maxLength;
+
+
+/// 最大行数限制，默认无限制, 如果被设为 0 也同样表示不限制行数
+@property (nonatomic, assign) IBInspectable NSUInteger maxLine;
+
+/// 最大行数-省略号位置
+@property (assign, nonatomic) NSLineBreakMode maxLineMode;
 
 /**
  圆角半径.

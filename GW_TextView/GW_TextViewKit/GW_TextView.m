@@ -117,8 +117,7 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
 
 #pragma mark - Public
 
-+ (instancetype)textView
-{
++ (GW_TextView *)textView{
     return [[self alloc] init];
 }
 
@@ -141,17 +140,23 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
     }
     
     // 只有当maxLength字段的值不为无穷大整型也不为0时才计算限制字符数.
-    if (_maxLength != NSUIntegerMax && _maxLength != 0 && self.text.length > 0) {
-        
-        if (!self.markedTextRange && self.text.length > _maxLength) {
-            // 回调达到最大限制的Block.
-            if (_GWTextLengthDidMaxBlock) {
-                _GWTextLengthDidMaxBlock(self,_maxLength);
+    if (self.text.length > 0) {
+        if (_maxLength != NSUIntegerMax && _maxLength != 0) {
+            
+            if (!self.markedTextRange && self.text.length > _maxLength) {
+                // 回调达到最大限制的Block.
+                if (_GWTextLengthDidMaxBlock) {
+                    _GWTextLengthDidMaxBlock(self,_maxLength);
+                }
+                self.text = [self.text substringToIndex:_maxLength]; // 截取最大限制字符数.
+                [self.undoManager removeAllActions]; // 达到最大字符数后清空所有 undoaction, 以免 undo 操作造成crash.
             }
-            self.text = [self.text substringToIndex:_maxLength]; // 截取最大限制字符数.
-            [self.undoManager removeAllActions]; // 达到最大字符数后清空所有 undoaction, 以免 undo 操作造成crash.
         }
+//        else if (_maxLine != NSUIntegerMax && _maxLine != 0){
+//            float limitHeight = self.font.lineHeight * _maxLine;
+//        }
     }
+    
     
     // 回调文本改变的Block.
     if (_GWTextDidChangeBlock) {
@@ -161,12 +166,18 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
 
 #pragma mark - textView - delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView{
+    self.textContainer.maximumNumberOfLines = 0;
+    self.textContainer.lineBreakMode = 0;
     if (self.GWTextViewEditingBlock) {
         self.GWTextViewEditingBlock(GW_TextViewBeginEditing);
     }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView{
+    if (_maxLine != NSUIntegerMax && _maxLine != 0) {
+        self.textContainer.maximumNumberOfLines = _maxLine;
+        self.textContainer.lineBreakMode = _maxLineMode;
+    }
     if (self.GWTextViewEditingBlock) {
         self.GWTextViewEditingBlock(GW_TextViewEndEditing);
     }
@@ -222,6 +233,17 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
 {
     _maxLength = fmax(0, maxLength);
     self.text = self.text;
+}
+
+- (void)setMaxLine:(NSUInteger)maxLine{
+    _maxLine = fmax(0, maxLine);
+    self.textContainer.maximumNumberOfLines = _maxLine;
+    
+}
+
+- (void)setMaxLineMode:(NSLineBreakMode)maxLineMode{
+    _maxLineMode = maxLineMode;
+    self.textContainer.lineBreakMode = maxLineMode;
 }
 
 - (void)setCornerRadius:(CGFloat)cornerRadius
