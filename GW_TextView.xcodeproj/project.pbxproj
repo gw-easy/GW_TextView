@@ -14,7 +14,7 @@
 		2810232E22E1775900849D0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2810232D22E1775900849D0D /* Assets.xcassets */; };
 		2810233122E1775900849D0D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2810232F22E1775900849D0D /* LaunchScreen.storyboard */; };
 		2810233422E1775900849D0D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2810233322E1775900849D0D /* main.m */; };
-		2810233D22E1779E00849D0D /* GW_TextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2810233C22E1779E00849D0D /* GW_TextView.m */; };
+		2810233D22E1779E00849D0D /* GWTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2810233C22E1779E00849D0D /* GWTextView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,8 +29,8 @@
 		2810233022E1775900849D0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2810233222E1775900849D0D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2810233322E1775900849D0D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2810233B22E1779E00849D0D /* GW_TextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GW_TextView.h; sourceTree = "<group>"; };
-		2810233C22E1779E00849D0D /* GW_TextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GW_TextView.m; sourceTree = "<group>"; };
+		2810233B22E1779E00849D0D /* GWTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GWTextView.h; sourceTree = "<group>"; };
+		2810233C22E1779E00849D0D /* GWTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GWTextView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,8 +81,8 @@
 		2810233A22E1777A00849D0D /* GW_TextViewKit */ = {
 			isa = PBXGroup;
 			children = (
-				2810233B22E1779E00849D0D /* GW_TextView.h */,
-				2810233C22E1779E00849D0D /* GW_TextView.m */,
+				2810233B22E1779E00849D0D /* GWTextView.h */,
+				2810233C22E1779E00849D0D /* GWTextView.m */,
 			);
 			path = GW_TextViewKit;
 			sourceTree = "<group>";
@@ -161,7 +161,7 @@
 				2810232622E1775800849D0D /* ViewController.m in Sources */,
 				2810233422E1775900849D0D /* main.m in Sources */,
 				2810232322E1775800849D0D /* AppDelegate.m in Sources */,
-				2810233D22E1779E00849D0D /* GW_TextView.m in Sources */,
+				2810233D22E1779E00849D0D /* GWTextView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

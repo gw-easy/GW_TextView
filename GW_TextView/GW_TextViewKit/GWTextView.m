@@ -6,17 +6,16 @@
 //  Copyright © 2019 DoubleK. All rights reserved.
 //
 
-#import "GW_TextView.h"
+#import "GWTextView.h"
 
 CGFloat const TextViewPlaceholderVerticalMargin = 8.0; ///< placeholder垂直方向边距
 CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平方向边距
 
-@interface GW_TextView()<UITextViewDelegate>
+@interface GWTextView()<UITextViewDelegate>
 
-///< placeholderLabel
-@property (nonatomic, strong) UILabel *placeholderLabel;
+
 @end
-@implementation GW_TextView
+@implementation GWTextView
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder{
     if (self = [super initWithCoder:aDecoder]) {
@@ -92,6 +91,7 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
                                                      attribute:NSLayoutAttributeTop
                                                     multiplier:1.0
                                                       constant:TextViewPlaceholderVerticalMargin]];
+
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.placeholderLabel
                                                      attribute:NSLayoutAttributeLeft
                                                      relatedBy:NSLayoutRelationEqual
@@ -99,13 +99,15 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
                                                      attribute:NSLayoutAttributeLeft
                                                     multiplier:1.0
                                                       constant:TextViewPlaceholderHorizontalMargin]];
+    
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.placeholderLabel
                                                      attribute:NSLayoutAttributeWidth
-                                                     relatedBy:NSLayoutRelationLessThanOrEqual
+                                                     relatedBy:NSLayoutRelationEqual
                                                         toItem:self
                                                      attribute:NSLayoutAttributeWidth
                                                     multiplier:1.0
                                                       constant:-TextViewPlaceholderHorizontalMargin*2]];
+    
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.placeholderLabel
                                                      attribute:NSLayoutAttributeHeight
                                                      relatedBy:NSLayoutRelationLessThanOrEqual
@@ -117,7 +119,7 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
 
 #pragma mark - Public
 
-+ (GW_TextView *)textView{
++ (GWTextView *)textView{
     return [[self alloc] init];
 }
 
@@ -152,9 +154,6 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
                 [self.undoManager removeAllActions]; // 达到最大字符数后清空所有 undoaction, 以免 undo 操作造成crash.
             }
         }
-//        else if (_maxLine != NSUIntegerMax && _maxLine != 0){
-//            float limitHeight = self.font.lineHeight * _maxLine;
-//        }
     }
     
     
@@ -222,6 +221,11 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
     [self textDidChange:notification];
 }
 
+- (void)setTextAlignment:(NSTextAlignment)textAlignment{
+    [super setTextAlignment:textAlignment];
+    self.placeholderLabel.textAlignment = textAlignment;
+}
+
 - (void)setFont:(UIFont *)font
 {
     [super setFont:font];
@@ -265,6 +269,7 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
     _borderWidth = borderWidth;
     self.layer.borderWidth = _borderWidth;
 }
+
 
 - (void)setPlaceholder:(NSString *)placeholder
 {

@@ -17,13 +17,13 @@ typedef NS_ENUM(NSInteger, GW_TextViewEditingType) {
     GW_TextViewReturn, //return事件
 };
 
-@class GW_TextView;
+@class GWTextView;
 
 IB_DESIGNABLE
 //IB_DESIGNABLE 效果就是带有IBInspectable自定义属性能再XIB上及时看到当前类调改的效果,比如设置placeholder的时候或者设置圆角,可以立即呈现.如果报错，请将这句话注释并重启
 
 
-@interface GW_TextView : UITextView
+@interface GWTextView : UITextView
 
 /// 获取编辑类型
 @property (copy, nonatomic) void(^GWTextViewEditingBlock)(GW_TextViewEditingType editingType);
@@ -31,18 +31,18 @@ IB_DESIGNABLE
 /**
  设定文本改变Block回调.
  */
-@property (copy, nonatomic) void(^GWTextDidChangeBlock)(GW_TextView *textView,NSString *text);
+@property (copy, nonatomic) void(^GWTextDidChangeBlock)(GWTextView *textView,NSString *text);
 
 /**
  设定达到最大长度Block回调.
  */
-@property (copy, nonatomic) void(^GWTextLengthDidMaxBlock)(GW_TextView *textView,NSInteger maxLength);
+@property (copy, nonatomic) void(^GWTextLengthDidMaxBlock)(GWTextView *textView,NSInteger maxLength);
 
 
 /**
  便利构造器.
  */
-+ (GW_TextView *)textView;
++ (GWTextView *)textView;
 
 
 //IBInspectable 将代码属性插入到xib或sb的状态栏里面
@@ -57,7 +57,7 @@ IB_DESIGNABLE
 @property (nonatomic, assign) IBInspectable NSUInteger maxLine;
 
 /// 最大行数-省略号位置
-@property (assign, nonatomic) NSLineBreakMode maxLineMode;
+@property (assign, nonatomic) IBInspectable NSLineBreakMode maxLineMode;
 
 /**
  圆角半径.
@@ -74,6 +74,8 @@ IB_DESIGNABLE
  */
 @property (nonatomic, strong) IBInspectable UIColor *borderColor;
 
+///< placeholderLabel
+@property (nonatomic, strong) UILabel *placeholderLabel;
 /**
  placeholder, 会自适应TextView宽高以及横竖屏切换, 字体默认和TextView一致.
  */
