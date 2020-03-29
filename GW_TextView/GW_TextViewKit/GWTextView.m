@@ -8,8 +8,8 @@
 
 #import "GWTextView.h"
 
-CGFloat const TextViewPlaceholderVerticalMargin = 8.0; ///< placeholder垂直方向边距
-CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平方向边距
+CGFloat const TextViewPlaceholderVerticalMargin = 0.0; ///< placeholder垂直方向边距
+CGFloat const TextViewPlaceholderHorizontalMargin = 0.0; ///< placeholder水平方向边距
 
 @interface GWTextView()<UITextViewDelegate>
 
@@ -165,8 +165,10 @@ CGFloat const TextViewPlaceholderHorizontalMargin = 6.0; ///< placeholder水平�
 
 #pragma mark - textView - delegate
 - (void)textViewDidBeginEditing:(UITextView *)textView{
-    self.textContainer.maximumNumberOfLines = 0;
-    self.textContainer.lineBreakMode = 0;
+    if (_maxLine != NSUIntegerMax && _maxLine != 0) {
+        self.textContainer.maximumNumberOfLines = 0;
+        self.textContainer.lineBreakMode = 0;
+    }
     if (self.GWTextViewEditingBlock) {
         self.GWTextViewEditingBlock(GW_TextViewBeginEditing);
     }

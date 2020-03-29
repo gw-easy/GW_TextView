@@ -21,14 +21,23 @@
 }
 
 - (void)test1{
-    _textV = [[GWTextView alloc] initWithFrame:CGRectMake(10, 100, self.view.bounds.size.width-20, 50)];
+    _textV = [[GWTextView alloc] initWithFrame:CGRectMake(10, 100, self.view.bounds.size.width-20, 27)];
     [self.view addSubview:_textV];
     _textV.backgroundColor = [UIColor greenColor];
     _textV.textColor = [UIColor blackColor];
     _textV.placeholder = @"lihaile";
-//    _textV.maxLength = 10;
     _textV.font = [UIFont systemFontOfSize:25];
     _textV.textAlignment = NSTextAlignmentRight;
+    _textV.maxLine = 3;
+    _textV.maxLineMode = NSLineBreakByTruncatingTail;
+    _textV.GWTextDidChangeBlock = ^(GWTextView * _Nonnull textView, NSString * _Nonnull text) {
+        CGFloat maxHeight = textView.font.lineHeight * textView.maxLine;
+        CGFloat currentHeight = [textView sizeThatFits:CGSizeMake(textView.bounds.size.width, MAXFLOAT)].height;
+        if (currentHeight > maxHeight) {
+            textView.frame = CGRectMake(textView.frame.origin.x,textView.frame.origin.y, textView.frame.size.width, maxHeight+10);
+        }
+    };
+    
     
 //    _textV.maxLine = 1;
 //    _textV.maxLineMode = NSLineBreakByTruncatingTail;
@@ -40,9 +49,7 @@
         NSLog(@"GWTextViewEditingBlock = %ld",(long)editingType);
     };
     
-    _textV.GWTextDidChangeBlock = ^(GWTextView * _Nonnull textView, NSString * _Nonnull text) {
-        NSLog(@"GWTextDidChangeBlock = %@",text);
-    };
+    
     
 }
 
